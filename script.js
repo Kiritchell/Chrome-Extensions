@@ -2,42 +2,55 @@ const inputEl = document.querySelector('#input-el')
 const saveBTN = document.querySelector('#save-btn')
 let myLeads = []
 const ulEl = document.querySelector('#ul-el')
-let leadsFromLocalStorage = JSON.parse(localStorage.getItem("Lead"))
+const leadsFromLocalStorage = JSON.parse(localStorage.getItem("myLeads"))
+const clearButton=document.querySelector('#clear-btn')
+const tabBtn = document.querySelector('#tab-btn')
+let tabs = [{url:"google.com"}]
 
-console.log(leadsFromLocalStorage)
-
-// Get the leads from the localStorage - PS: JSON.parse()
-// Store it in a variable, leadsFromLocalStorage
-// Log out the variable
-
-//The two below will save with save button or enter key
+if (leadsFromLocalStorage) {
+  myLeads = leadsFromLocalStorage
+  render(myLeads)
+}
 
 inputEl.addEventListener('keypress', function(event) {
   if (event.keyCode === 13) {
     myLeads.push(inputEl.value)
-    localStorage.setItem("Lead", JSON.stringify(myLeads))
-    renderLeads()
+    localStorage.setItem("myLeads", JSON.stringify(myLeads))
+    render(myLeads)
     inputEl.value = ""
   }
 });
 
 saveBTN.addEventListener('click', function(){
   myLeads.push(inputEl.value)
-  localStorage.setItem("Lead", JSON.stringify(myLeads  ))
-  renderLeads()
+  localStorage.setItem("myLeads", JSON.stringify(myLeads))
+  render(myLeads)
   inputEl.value = ""
 })
 
 
 
-function renderLeads(){
+function render(leads) {
   let listItems = ""
-    for(let i = 0; i<myLeads.length;i++){
-    listItems += `<li class="list-items">
-                      <a target='_blank' href='https://www.${myLeads[i]}'>
-                       ${myLeads[i]}
-                      </a>
-                  </li>`
-    }
-  ulEl.innerHTML = listItems
+  for (let i = 0; i < leads.length; i++) {
+      listItems += `
+          <li>
+              <a target='_blank' href='${leads[i]}'>
+                  ${leads[i]}
+              </a>
+          </li>
+      `
   }
+  ulEl.innerHTML = listItems
+}
+
+clearButton.addEventListener('dblclick', function(){
+  localStorage.clear(myLeads)
+  myLeads = []
+  render(myLeads)
+})
+
+tabBtn.addEventListener('click', function(){
+
+})
+
